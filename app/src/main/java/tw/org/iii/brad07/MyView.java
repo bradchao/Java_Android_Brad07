@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+
 /**
  * Created by user on 2017/1/15.
  */
@@ -16,28 +19,40 @@ import android.view.View;
 public class MyView extends View {
     private Context c;
     private int viewW, viewH;
+    private LinkedList<LinkedList<HashMap<String,Float>>> lines;
 
     public MyView(Context context, AttributeSet attrs){
         super(context, attrs);
         c = context;
         setBackgroundColor(Color.BLACK);
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.v("brad", "onClick");
-            }
-        });
-
-        setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.v("brad", "onTouch");
-                return false;
-            }
-        });
-
+        lines = new LinkedList<>();
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float ex = event.getX(); float ey = event.getY();
+        if (event.getAction()==MotionEvent.ACTION_DOWN){
+            addNewLine(ex, ey);
+        }else if (event.getAction()==MotionEvent.ACTION_UP){
+        }else if (event.getAction()==MotionEvent.ACTION_MOVE){
+            addNewPoint(ex, ey);
+        }
+        return true; //super.onTouchEvent(event);
+    }
+
+    private void addNewLine(float x, float y){
+        LinkedList<HashMap<String,Float>> line = new LinkedList<>();
+        lines.add(line);
+        addNewPoint(x, y);
+    }
+
+    private void addNewPoint(float x, float y){
+        HashMap<String, Float> point = new HashMap<>();
+        point.put("x", x); point.put("y",y);
+        lines.getLast().add(point);
+    }
+
 
     @Override
     protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
