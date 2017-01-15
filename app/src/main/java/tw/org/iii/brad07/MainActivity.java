@@ -7,6 +7,7 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     private View mainView;
+    private MyView myView;
     private int mainWidth, mainHeight;
 
     @Override
@@ -15,26 +16,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mainView = findViewById(R.id.activity_main);
+        myView = (MyView) findViewById(R.id.myView);
 
-        mainWidth = mainView.getWidth();
-        mainHeight = mainView.getHeight();
-        Log.v("brad", "1. " + mainWidth + "x" + mainHeight);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mainWidth = mainView.getWidth();
-        mainHeight = mainView.getHeight();
-        Log.v("brad", "2. " + mainWidth + "x" + mainHeight);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mainWidth = mainView.getWidth();
-        mainHeight = mainView.getHeight();
-        Log.v("brad", "3. " + mainWidth + "x" + mainHeight);
     }
 
     @Override
@@ -43,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         if (hasFocus){
             mainWidth = mainView.getWidth();
             mainHeight = mainView.getHeight();
-            Log.v("brad", "4. " + mainWidth + "x" + mainHeight);
+            Log.v("brad", "4. " + myView.getWidth() + "x" + myView.getHeight());
         }else{
             Log.v("brad", "xx focus");
         }
