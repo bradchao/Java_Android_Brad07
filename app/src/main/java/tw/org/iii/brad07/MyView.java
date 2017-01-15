@@ -19,12 +19,17 @@ import java.util.LinkedList;
 public class MyView extends View {
     private Context c;
     private int viewW, viewH;
+    private Paint paint;
     private LinkedList<LinkedList<HashMap<String,Float>>> lines;
 
     public MyView(Context context, AttributeSet attrs){
         super(context, attrs);
         c = context;
         setBackgroundColor(Color.BLACK);
+
+        paint = new Paint();
+        paint.setColor(Color.YELLOW);
+        paint.setStrokeWidth(4);
 
         lines = new LinkedList<>();
     }
@@ -51,6 +56,7 @@ public class MyView extends View {
         HashMap<String, Float> point = new HashMap<>();
         point.put("x", x); point.put("y",y);
         lines.getLast().add(point);
+        invalidate();   // repaint
     }
 
 
@@ -65,9 +71,13 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint paint = new Paint();
-        paint.setColor(Color.YELLOW);
-        paint.setStrokeWidth(4);
-        canvas.drawLine(0,0,200,200,paint);
+
+        for (LinkedList<HashMap<String,Float>> line : lines){
+            for (int i=1; i<line.size(); i++){
+                canvas.drawLine(line.get(i-1).get("x"),line.get(i-1).get("y"),
+                        line.get(i).get("x"),line.get(i).get("y"),paint);
+            }
+        }
+
     }
 }
