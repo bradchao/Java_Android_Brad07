@@ -1,8 +1,12 @@
 package tw.org.iii.brad07;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -23,12 +27,18 @@ public class MyView extends View {
     private Paint paint;
     private LinkedList<LinkedList<HashMap<String,Float>>> lines;
     private GestureDetector gd;
+    private Resources res;
+    private Bitmap ballBmp;
+    private float ballW, ballH;
+    private Matrix matrix;
 
     public MyView(Context context, AttributeSet attrs){
         super(context, attrs);
         c = context;
+        res = c.getResources();
         setBackgroundColor(Color.BLACK);
 
+        matrix = new Matrix();
         gd = new GestureDetector(c, new MyGDListener());
 
         paint = new Paint();
@@ -94,7 +104,16 @@ public class MyView extends View {
         super.onSizeChanged(xNew, yNew, xOld, yOld);
 
         viewW = getWidth(); viewH = getHeight();
-        Log.v("brad", "MyView:onSizeChanged(): " +viewW + "x" + viewH);
+        init();
+    }
+
+    private void init(){
+        ballW = viewW / 8f; ballH = ballW;
+        ballBmp = BitmapFactory.decodeResource(res,R.drawable.ball2);
+        matrix.reset();
+        matrix.postScale(ballW/ballBmp.getWidth(), ballH/ballBmp.getHeight());
+        ballBmp = Bitmap.createBitmap(ballBmp,0,0,
+                ballBmp.getWidth(),ballBmp.getHeight(),matrix,false);
     }
 
     @Override
@@ -107,6 +126,8 @@ public class MyView extends View {
                         line.get(i).get("x"),line.get(i).get("y"),paint);
             }
         }
+        canvas.drawBitmap(ballBmp, 0, 0, null);
+
 
     }
 }
