@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -20,6 +21,22 @@ public class MyView extends View {
         super(context, attrs);
         c = context;
         setBackgroundColor(Color.BLACK);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.v("brad", "onClick");
+            }
+        });
+
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.v("brad", "onTouch");
+                return false;
+            }
+        });
+
     }
 
     @Override
