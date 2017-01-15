@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -21,17 +22,34 @@ public class MyView extends View {
     private int viewW, viewH;
     private Paint paint;
     private LinkedList<LinkedList<HashMap<String,Float>>> lines;
+    private GestureDetector gd;
 
     public MyView(Context context, AttributeSet attrs){
         super(context, attrs);
         c = context;
         setBackgroundColor(Color.BLACK);
 
+        gd = new GestureDetector(c, new MyGDListener());
+
         paint = new Paint();
         paint.setColor(Color.YELLOW);
         paint.setStrokeWidth(4);
 
         lines = new LinkedList<>();
+    }
+
+    private class MyGDListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            Log.v("brad", "onDown");
+            return true; //super.onDown(e);
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.v("brad", "onFling");
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
     }
 
     @Override
@@ -43,7 +61,7 @@ public class MyView extends View {
         }else if (event.getAction()==MotionEvent.ACTION_MOVE){
             addNewPoint(ex, ey);
         }
-        return true; //super.onTouchEvent(event);
+        return gd.onTouchEvent(event); //super.onTouchEvent(event);
     }
 
     private void addNewLine(float x, float y){
