@@ -41,14 +41,25 @@ public class MyView extends View {
     private class MyGDListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDown(MotionEvent e) {
-            Log.v("brad", "onDown");
             return true; //super.onDown(e);
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.v("brad", "onFling");
-            return super.onFling(e1, e2, velocityX, velocityY);
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float vX, float vY) {
+            if (Math.abs(vX)>Math.abs(vY)){
+                if (vX > 1000){
+                    Log.v("brad", "Right");
+                }else if (vX < -1000){
+                    Log.v("brad", "Left");
+                }
+            }else{
+                if (vY > 1000){
+                    Log.v("brad", "Down");
+                }else if (vY < -1000){
+                    Log.v("brad", "Up");
+                }
+            }
+            return super.onFling(e1, e2, vX, vY);
         }
     }
 
