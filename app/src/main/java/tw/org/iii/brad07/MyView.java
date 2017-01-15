@@ -16,6 +16,8 @@ import android.view.View;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by user on 2017/1/15.
@@ -31,6 +33,8 @@ public class MyView extends View {
     private Bitmap ballBmp;
     private float ballW, ballH;
     private Matrix matrix;
+    private float ballX, ballY, dx, dy;
+    private Timer timer;
 
     public MyView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -38,6 +42,7 @@ public class MyView extends View {
         res = c.getResources();
         setBackgroundColor(Color.BLACK);
 
+        timer = new Timer();
         matrix = new Matrix();
         gd = new GestureDetector(c, new MyGDListener());
 
@@ -46,6 +51,23 @@ public class MyView extends View {
         paint.setStrokeWidth(4);
 
         lines = new LinkedList<>();
+    }
+
+    Timer getTimer(){return timer;}
+    private class BallTask extends TimerTask {
+        @Override
+        public void run() {
+            if (ballX < 0 || ballX + ballW > viewW){
+                dx *= -1;
+            }
+            if (ballY<0 || ballY + ballH > viewH){
+                dy *= -1;
+            }
+
+
+            ballX += dx; ballY+= dy;
+            postInvalidate();
+        }
     }
 
     private class MyGDListener extends GestureDetector.SimpleOnGestureListener {
@@ -109,11 +131,13 @@ public class MyView extends View {
 
     private void init(){
         ballW = viewW / 8f; ballH = ballW;
+        dx = dy = 8;
         ballBmp = BitmapFactory.decodeResource(res,R.drawable.ball2);
         matrix.reset();
         matrix.postScale(ballW/ballBmp.getWidth(), ballH/ballBmp.getHeight());
         ballBmp = Bitmap.createBitmap(ballBmp,0,0,
                 ballBmp.getWidth(),ballBmp.getHeight(),matrix,false);
+        timer.schedule(new BallTask(),1000, 40);
     }
 
     @Override
@@ -126,7 +150,7 @@ public class MyView extends View {
                         line.get(i).get("x"),line.get(i).get("y"),paint);
             }
         }
-        canvas.drawBitmap(ballBmp, 0, 0, null);
+        canvas.drawBitmap(ballBmp, ballX, ballY, null);
 
 
     }

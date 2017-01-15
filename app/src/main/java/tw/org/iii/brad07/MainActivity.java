@@ -41,4 +41,13 @@ public class MainActivity extends AppCompatActivity {
             Log.v("brad", "xx focus");
         }
     }
+
+    @Override
+    public void finish() {
+        if (myView.getTimer() != null){
+            myView.getTimer().purge();
+            myView.getTimer().cancel();
+        }
+        super.finish();
+    }
 }
