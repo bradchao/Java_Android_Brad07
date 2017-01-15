@@ -19,15 +19,18 @@ public class MyView extends View {
         super(context, attrs);
         c = context;
         setBackgroundColor(Color.BLACK);
+    }
+
+    @Override
+    protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld){
+        super.onSizeChanged(xNew, yNew, xOld, yOld);
 
         viewW = getWidth(); viewH = getHeight();
-        Log.v("brad", "MyView: " +viewW + "x" + viewH);
+        Log.v("brad", "MyView:onSizeChanged(): " +viewW + "x" + viewH);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        viewW = getWidth(); viewH = getHeight();
-        Log.v("brad", "MyView:onDraw(): " +viewW + "x" + viewH);
     }
 }
